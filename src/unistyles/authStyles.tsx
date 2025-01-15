@@ -37,8 +37,8 @@ export const loginStyles = createStyleSheet(({ colors, device, border }) => ({
         width: '100%',
         height: device.height * 0.4,
         resizeMode: 'cover',
-        borderBottomEndRadius: 60,
-        borderBottomStartRadius: 60
+        borderBottomEndRadius: 80,
+        borderBottomStartRadius: 80
     },
     bottomContainer: {
         width: '100%',

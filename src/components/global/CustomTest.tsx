@@ -6,7 +6,7 @@ export type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'subtitle
 export type PlatformType = 'ios' | 'android' | 'web'
 
 export interface CustomTextProps {
-    variant: Variant
+    variant?: Variant
     platform?: Platform
     fontFamily?: 'Okra-Bold' | 'Okra-Regular' | 'Okra-Light' | 'Okra-Medium' | 'Okra-SemiBold' | 'Okra-ExtraBold' | 'Okra-Black'
     fontSize?: number;
@@ -34,7 +34,7 @@ const fontSizeMap: Record<Variant, Record<PlatformType, number>> = {
 };
 
 
-const CustomText: React.FC<CustomTextProps> = ({ variant, fontFamily = 'Okra-Bold', fontSize, color, children, numberOfLines, onLayout, style, ...props }) => {
+const CustomText: React.FC<CustomTextProps> = ({ variant , fontFamily = 'Okra-Bold', fontSize, color, children, numberOfLines, onLayout, style, ...props }) => {
     let computedFontSize: number = Platform.OS === 'android' ? RFValue(fontSize || 12) : RFValue(fontSize || 12);
     if (variant && fontSizeMap[variant]) {
         const defaultSize = fontSizeMap[variant][Platform.OS as PlatformType];
