@@ -1,15 +1,17 @@
-import { View, StatusBar, Platform, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import React, { FC, useState } from 'react';
+import { View, StatusBar, Platform, Image, TouchableOpacity, ActivityIndicator, Animated } from 'react-native';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useStyles } from 'react-native-unistyles';
 import { loginStyles } from '@unistyles/authStyles';
-import Animated from 'react-native-reanimated';
 import CustomText from '@components/global/CustomTest';
 import BreakerText from '@components/ui/BreakerText';
 import PhoneInput from '@components/ui/PhoneInput';
 import SocialLogin from '@components/ui/SocialLogin';
 import { resetAndNavigate } from '@utils/NavigationUtils';
+import useKeyboardOffsetHeight from '@utils/useKeyboardOffsetHeight';
 const LoginScreen: FC = () => {
   const { styles: loginStyle } = useStyles(loginStyles);
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const keyboardOffSetHeight = useKeyboardOffsetHeight();
   const [Phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,11 +22,19 @@ const LoginScreen: FC = () => {
       resetAndNavigate('UserBottomTab');
      },2000);
   };
+
+  useEffect(()=>{
+    if(keyboardOffSetHeight === 0){
+       Animated.timing(animatedValue,{toValue:0,duration:500,useNativeDriver:true}).start();
+      }else{
+      Animated.timing(animatedValue,{toValue:-keyboardOffSetHeight * 0.25,duration:500,useNativeDriver:true}).start();
+    }
+  });
   return (
     <View style={loginStyle.container}>
       <StatusBar hidden={Platform.OS !== 'android'} />
       <Image source={require('@assets/images/login.png')} style={loginStyle.cover} />
-      <Animated.ScrollView bounces={false} keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" contentContainerStyle={loginStyle.bottomContainer}>
+      <Animated.ScrollView style={{transform:[{translateY:animatedValue}]}}bounces={false} keyboardDismissMode="on-drag" keyboardShouldPersistTaps="handled" contentContainerStyle={loginStyle.bottomContainer}>
         <CustomText fontFamily="Okra-Bold" variant="h2" style={loginStyle.title}>
           India's #1 Food Delivery and Dining App
         </CustomText>
